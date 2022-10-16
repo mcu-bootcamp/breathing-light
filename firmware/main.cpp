@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <cmath>
+#include <stm32f0xx.h>
 
 void delay(volatile unsigned int t) {
     while (t-- > 0);
@@ -9,22 +10,17 @@ void delay_ms(unsigned int ms) {
     delay(671u * ms);
 }
 
-constexpr uintptr_t GPIOC = 0x4800'0800;
-
 void light_enable() {
-    constexpr uintptr_t RCC = 0x4002'1000;
-    *(uint32_t *) (RCC + 0x14) |= 1 << 19;
-
-    *(uint32_t *) (GPIOC) |= 1 << 18;
-    *(uint32_t *) (GPIOC) &= ~(1 << 19);
+    SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOCEN);
+    MODIFY_REG(GPIOC->MODER, GPIO_MODER_MODER9, GPIO_MODER_MODER9_0);
 }
 
 void light_turn_on() {
-    *(uint32_t *) (GPIOC + 0x14) |= (1 << 9);
+    SET_BIT(GPIOC->ODR, GPIO_ODR_9);
 }
 
 void light_turn_off() {
-    *(uint32_t *) (GPIOC + 0x14) &= ~(1 << 9);
+    CLEAR_BIT(GPIOC->ODR, GPIO_ODR_9);
 }
 
 void light_set_brightness(float brightness, uint32_t period) {
