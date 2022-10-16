@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <cmath>
-#include <stm32f0xx.h>
+#include <stm32f0xx_ll_gpio.h>
 
 void delay(unsigned int t) {
     while (t-- > 0);
@@ -11,16 +11,16 @@ void delay_ms(unsigned int ms) {
 }
 
 void light_enable() {
-    SET_BIT(RCC->AHBENR, RCC_AHBENR_GPIOCEN);
-    MODIFY_REG(GPIOC->MODER, GPIO_MODER_MODER9, GPIO_MODER_MODER9_0);
+    LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOC);
+    LL_GPIO_SetPinMode(GPIOC, LL_GPIO_PIN_9, LL_GPIO_MODE_OUTPUT);
 }
 
 void light_turn_on() {
-    SET_BIT(GPIOC->ODR, GPIO_ODR_9);
+    LL_GPIO_SetOutputPin(GPIOC, LL_GPIO_PIN_9);
 }
 
 void light_turn_off() {
-    CLEAR_BIT(GPIOC->ODR, GPIO_ODR_9);
+    LL_GPIO_ResetOutputPin(GPIOC, LL_GPIO_PIN_9);
 }
 
 void light_set_brightness(float brightness, uint32_t period) {
