@@ -5,4 +5,5 @@ target_link_options(stm32f072b-disco INTERFACE -T ${LINKER_SCRIPT})
 set_target_properties(stm32f072b-disco PROPERTIES INTERFACE_LINK_DEPENDS ${LINKER_SCRIPT})
 
 add_subdirectory(cmsis-core)
-target_link_libraries(stm32f072b-disco INTERFACE cmsis-core)
+add_subdirectory(driver)
+target_link_libraries(stm32f072b-disco INTERFACE driver)
