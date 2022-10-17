@@ -1,0 +1,8 @@
+if (CMAKE_CROSSCOMPILING)
+    add_executable(firmware)
+    target_sources(firmware PRIVATE main.cpp)
+    target_link_libraries(firmware PRIVATE stm32f072b-disco)
+    target_print_memory_usage(firmware)
+    target_export_hex(firmware)
+    target_export_bin(firmware)
+endif ()

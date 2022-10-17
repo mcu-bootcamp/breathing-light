@@ -1,0 +1,19 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "stm32f072b-disco",
+      "displayName": "stm32f072b-disco Config",
+      "description": "stm32f072b-disco build using cortex-m0 arm-none-eabi toolchain",
+      "binaryDir": "${sourceDir}/build/stm32f072b-disco",
+      "toolchainFile": "_deps/toolchains-src/gcc/arm-none-eabi/cortex-m0.cmake"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "stm32f072b-disco",
+      "configurePreset": "stm32f072b-disco",
+      "targets": ["firmware"]
+    }
+  ]
+} 
