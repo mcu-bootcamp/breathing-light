@@ -9,6 +9,13 @@
 2. Just run CMake to build
     ```shell
     mkdir build
-    cmake --toolchain cmake/cortex-m0.cmake -B build
+    cmake --toolchain _deps/toolchains-src/gcc/arm-none-eabi/cortex-m0.cmake -B build
     cmake --build build --target dist
     ```
+
+> ###### Note
+> 
+> When using IDE instead of command line, be aware of the key of build is to specify toolchain file for cross-compile as:
+> `--toolchain _deps/toolchains-src/gcc/arm-none-eabi/cortex-m0.cmake`
+> 
+> This toolchain file is not part of this repo, it will download automatically from GitHub during first time configure.
