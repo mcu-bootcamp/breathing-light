@@ -13,7 +13,7 @@ FetchContent_MakeAvailable(cmsis_device_f0)
 add_library(cmsis-core)
 target_sources(cmsis-core PRIVATE
         ${cmsis_device_f0_SOURCE_DIR}/Source/Templates/gcc/startup_stm32f072xb.s
-        ${cmsis_device_f0_SOURCE_DIR}/Source/Templates/system_stm32f0xx.c
+        system_stm32f0xx.c
         )
 target_compile_definitions(cmsis-core PUBLIC STM32F072xB=1)
 target_include_directories(cmsis-core PUBLIC
