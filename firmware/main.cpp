@@ -3,13 +3,10 @@
 #include <stm32f0xx_ll_system.h>
 #include <stm32f0xx_ll_rcc.h>
 #include <stm32f0xx_ll_gpio.h>
-
-void delay(unsigned int t) {
-    while (t-- > 0);
-}
+#include <stm32f0xx_ll_utils.h>
 
 void delay_ms(unsigned int ms) {
-    delay(671u * ms);
+    LL_mDelay(ms);
 }
 
 void light_enable() {
@@ -55,6 +52,8 @@ void boost()
         ;
 
     SystemCoreClockUpdate();
+
+    LL_Init1msTick(SystemCoreClock);
 }
 
 int main() {
