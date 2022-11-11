@@ -140,6 +140,8 @@ void SystemInit(void)
 
     MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_HSI48);
     while (READ_BIT(RCC->CFGR, RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI48);
+
+    SystemCoreClockUpdate();
 }
 
 /**
