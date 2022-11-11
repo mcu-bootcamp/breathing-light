@@ -1,13 +1,17 @@
 #include <cstdint>
 #include <cmath>
 #include <stm32f0xx_ll_gpio.h>
-
-void delay(volatile unsigned int t) {
-    while (t-- > 0);
-}
+#include <stm32f0xx_ll_utils.h>
 
 void delay_ms(unsigned int ms) {
-    delay(671u * ms);
+    while(ms > 0) {
+        while (true) {
+            if ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) != 0U) {
+                --ms;
+                break;
+            }
+        }
+    }
 }
 
 void light_enable() {
@@ -43,6 +47,7 @@ float breathing_brightness(uint32_t t, uint32_t respiratory_period) {
 }
 
 int main() {
+    LL_Init1msTick(SystemCoreClock);
     light_enable();
 
     constexpr uint32_t refresh_rate = 50;
