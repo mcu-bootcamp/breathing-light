@@ -1,5 +1,7 @@
 #include <cstdint>
 #include <cmath>
+#include <stm32f0xx_ll_system.h>
+#include <stm32f0xx_ll_rcc.h>
 #include <stm32f0xx_ll_gpio.h>
 
 void delay(unsigned int t) {
@@ -42,7 +44,22 @@ float breathing_brightness(uint32_t t, uint32_t respiratory_period) {
     return (std::sin(radian) + 1) / 2;
 }
 
+void boost()
+{
+    LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
+    LL_RCC_HSI48_Enable();
+    while (LL_RCC_HSI48_IsReady() != 1)
+        ;
+    LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_HSI48);
+    while (LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_HSI48)
+        ;
+
+    SystemCoreClockUpdate();
+}
+
 int main() {
+    boost();
+
     light_enable();
 
     constexpr uint32_t refresh_rate = 50;
