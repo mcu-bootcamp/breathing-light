@@ -1,5 +1,5 @@
-#include <cstdint>
-#include <cmath>
+#include "breathing.hpp"
+
 #include <stm32f0xx_ll_system.h>
 #include <stm32f0xx_ll_rcc.h>
 #include <stm32f0xx_ll_gpio.h>
@@ -35,12 +35,6 @@ void light_set_brightness(float brightness, uint32_t period) {
     }
 }
 
-float breathing_brightness(uint32_t t, uint32_t respiratory_period) {
-    constexpr auto PI = 3.1415926f;
-    auto radian = t * 2 * PI / respiratory_period - PI / 2;
-    return (std::sin(radian) + 1) / 2;
-}
-
 void boost()
 {
     LL_FLASH_SetLatency(LL_FLASH_LATENCY_1);
@@ -61,13 +55,10 @@ int main() {
 
     light_enable();
 
-    constexpr uint32_t refresh_rate = 50;
-    constexpr auto refresh_period = 1000u / refresh_rate;
-    constexpr auto respiratory_rate = 12u;
-    constexpr auto respiratory_period = 60'000u / respiratory_rate;
-    for (uint32_t t = 0; true; t = (t + refresh_period) % respiratory_period) {
-        auto brightness = breathing_brightness(t, respiratory_period);
-        light_set_brightness(brightness, refresh_period);
+    while (true) {
+        for (auto brightness : breathing::brightnesses) {
+            light_set_brightness(brightness, breathing::refresh_period.count());
+        }
     }
     return 0;
 }
